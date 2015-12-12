@@ -21,21 +21,24 @@ void listenForPackets(struct sockaddr_in serverDetails, SOCKET sock, struct sock
 {
 	char recievedFrom[SIZE_WELCOME];
 	int size = sizeof(recieved);
-	fprintf(stderr, "recieved : %s\n", recievedFrom);
-	int retlen;
-	if(retlen = recvfrom(sock, recievedFrom, SIZE_WELCOME, 0, (struct sockaddr *) &recieved, &size ) == SOCKET_ERROR)
+	int stringSize;
+	if(recvfrom(sock, recievedFrom, SIZE_WELCOME, 0, (struct sockaddr *) &recieved, &size ) == SOCKET_ERROR)
 	{
 		fprintf(stderr, "recv from port error : %d\n", WSAGetLastError());
 		*isSuccess = FAIL;
 		return;
 	
 	}
-	fprintf(stderr, "recieved : %s\n", recievedFrom);
 	if(strcmp(recievedFrom, WELCOME_COMMAND) == 0)
 	{
-		sendto(sock, opt->SERVER_WELCOME, strlen(opt->SERVER_WELCOME),0, (const struct sockaddr *)&recieved,sizeof(recieved));
-	
+		fprintf(stderr, "recieved : %s\n", recievedFrom);
+		stringSize = strlen(opt->SERVER_WELCOME);
+		stringSize = htonl(stringSize);
+		if(strcmp(recievedFrom, WELCOME_COMMAND) == 0)
+		{
+			sendto(sock, opt->SERVER_WELCOME, strlen(opt->SERVER_WELCOME),0, (const struct sockaddr *)&recieved,sizeof(recieved));
+			sendto(sock, &stringSize, sizeof(stringSize),0, (const struct sockaddr *)&recieved,sizeof(recieved));
+		}
 	}
-
 
 }

@@ -145,6 +145,7 @@ options initOptions(const char *jsonFile, int *success)
 	tempOpt.BLUE_FILEPATH = json_string_value(json_object_get(optionsData,"BLUE_FILEPATH"));
 	tempOpt.NODE_FILEPATH = json_string_value(json_object_get(optionsData,"NODE_FILEPATH"));
 	tempOpt.IP_ADDRESS_SERVER = json_string_value(json_object_get(optionsData,"IP_ADDRESS_SERVER"));
+	tempOpt.FONT_PATH = json_string_value(json_object_get(optionsData,"FONT_PATH"));
 	tempOpt.PORT_ADDRESS = json_integer_value(json_object_get(optionsData,"PORT_ADDRESS"));
 
 	return tempOpt;
@@ -171,5 +172,128 @@ struct sockaddr_in getServerDetails(options *opt, int *success)
 		temp.sin_port = htons(opt->PORT_ADDRESS);
 
 		return temp;
+
+}
+unitData **initUnits(int *success)
+{
+	unitData **temp = malloc(sizeof(unitData *) * MAXIMUM_UNITS);
+	if(!temp)
+	{
+		fprintf(stderr, "malloc has failed : %s", strerror(errno));
+		*success = FAIL;
+		return NULL;
+	
+	}
+	int i;
+	for(i = 0; i < MAXIMUM_UNITS; i++)
+	{
+		temp[i] = malloc(sizeof(unitData));
+		if(!temp[i])
+		{	
+			fprintf(stderr, "malloc has failed : %s", strerror(errno));
+			*success = FAIL;
+			return NULL;
+	
+		}
+		temp[i]->alive = FAIL;//as to prevent new units being drawn
+	}
+
+	return temp;
+
+}
+void deinitUnits(unitData **unitArray)
+{
+	
+	int i;
+	for(i = 0; i < MAXIMUM_UNITS; i++)
+	{
+		free(unitArray[i]);
+	}
+	free(unitArray);
+
+
+}
+node **initNodes(int *success)
+{
+	node **temp = malloc(sizeof(node *) * MAXIMUM_NODES);
+	if(!temp)
+	{
+		fprintf(stderr, "malloc has failed : %s", strerror(errno));
+		*success = FAIL;
+		return NULL;
+	
+	}
+	int i;
+	for(i = 0; i < MAXIMUM_NODES; i++)
+	{
+		temp[i] = malloc(sizeof(node));
+		if(!temp[i])
+		{	
+			fprintf(stderr, "malloc has failed : %s", strerror(errno));
+			*success = FAIL;
+			return NULL;
+	
+		}
+		
+	}
+
+	return temp;
+
+}
+void deinitNodes(node **unitArray)
+{
+	
+	int i;
+	for(i = 0; i < MAXIMUM_NODES; i++)
+	{
+		free(unitArray[i]);
+	}
+	free(unitArray);
+
+
+}
+TTF_Font *LoadFont(const char *filename, int size, int *success)
+{
+	TTF_Font *temp = TTF_OpenFont(filename, size);
+	if(!temp)
+	{
+		fprintf(stderr, "TTF_OpenFont has failed : %s \n", TTF_GetError());
+		*success = FAIL;
+		return NULL;
+	}
+
+	return temp;
+}
+SDL_Texture *renderScore(TTF_Font *font, SDL_Rect *size, SDL_Renderer *render,const char *textStr, SDL_Color desireCol)
+{
+	//SDL_DestroyTexture(scoreDisplay);
+	SDL_Surface *temp;
+	SDL_Texture *tempTex;
+	char text[100];
+	sprintf(text,"%s",textStr);//makes a decent string
+	temp = TTF_RenderText_Solid(font,text,desireCol);//this creates a surface from the text
+	if(!temp)
+	{
+		fprintf(stderr, "Text unable to be created : %s\n", TTF_GetError());
+		return NULL;
+	
+	}
+	tempTex = SDL_CreateTextureFromSurface(render,temp);//makes a texture
+	
+	if(!tempTex)
+	{
+	
+		fprintf(stderr, "Texture failed to create : %s", SDL_GetError());
+		return NULL;
+	}
+	size->w = temp->w;
+	size->h = temp->h;
+	SDL_FreeSurface(temp);
+	
+	return tempTex;
+
+
+
+
 
 }

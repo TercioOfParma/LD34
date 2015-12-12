@@ -7,7 +7,8 @@
 		"BLUE_FILEPATH" : "blueUnit.bmp",
 		"NODE_FILEPATH" : "node.bmp",
 		"IP_ADDRESS_SERVER" : "109.146.226.49",
-		"PORT_ADDRESS" : 667
+		"PORT_ADDRESS" : 667,
+		"FONT_PATH" : "defaultFont.ttf"
 		
 	}
 ]

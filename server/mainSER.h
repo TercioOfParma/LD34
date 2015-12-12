@@ -14,6 +14,8 @@ const static int SENDING_BRACKET = 10;
 const static int NO_SIDES = 4;
 const static int SIZE_WELCOME = 1000000;
 const static char *WELCOME_COMMAND = "meep";
+const static char *FAIL_COMMAND = "Failed";
+const static int MAXIMUM_NODES = 64;
 typedef struct
 {
 	int PORT_ADDRESS;
@@ -43,3 +45,7 @@ struct sockaddr_in getServerDetails(options *opt, int *success);
 void deinit();
 void bindSocket(struct sockaddr_in serverDetails, SOCKET sock, int *isSuccess);
 void listenForPackets(struct sockaddr_in serverDetails, SOCKET sock, struct sockaddr_in recieved, options *opt, int *isSuccess);
+unitData **initUnits(int *success);
+void deinitUnits(unitData **unitArray);
+node **initNodes(int *success);
+void deinitNodes(node **unitArray);

@@ -120,3 +120,81 @@ struct sockaddr_in getServerDetails(options *opt, int *success)
 		return temp;
 
 }
+unitData **initUnits(int *success)
+{
+	unitData **temp = malloc(sizeof(unitData *) * MAXIMUM_UNITS);
+	if(!temp)
+	{
+		fprintf(stderr, "malloc has failed : %s", strerror(errno));
+		*success = FAIL;
+		return NULL;
+	
+	}
+	int i;
+	for(i = 0; i < MAXIMUM_UNITS; i++)
+	{
+		temp[i] = malloc(sizeof(unitData));
+		if(!temp[i])
+		{	
+			fprintf(stderr, "malloc has failed : %s", strerror(errno));
+			*success = FAIL;
+			return NULL;
+	
+		}
+		temp[i]->alive = FAIL;//as to prevent new units being drawn
+	}
+
+	return temp;
+
+}
+void deinitUnits(unitData **unitArray)
+{
+	
+	int i;
+	for(i = 0; i < MAXIMUM_UNITS; i++)
+	{
+		free(unitArray[i]);
+	}
+	free(unitArray);
+
+
+}
+node **initNodes(int *success)
+{
+	node **temp = malloc(sizeof(node *) * MAXIMUM_NODES);
+	if(!temp)
+	{
+		fprintf(stderr, "malloc has failed : %s", strerror(errno));
+		*success = FAIL;
+		return NULL;
+	
+	}
+	int i;
+	for(i = 0; i < MAXIMUM_NODES; i++)
+	{
+		temp[i] = malloc(sizeof(node));
+		if(!temp[i])
+		{	
+			fprintf(stderr, "malloc has failed : %s", strerror(errno));
+			*success = FAIL;
+			return NULL;
+	
+		}
+		
+	}
+
+	return temp;
+
+}
+void deinitNodes(node **unitArray)
+{
+	
+	int i;
+	for(i = 0; i < MAXIMUM_NODES; i++)
+	{
+		free(unitArray[i]);
+	}
+	free(unitArray);
+
+
+}

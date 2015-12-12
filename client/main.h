@@ -18,10 +18,18 @@ const static int SENDING_BRACKET = 10;
 const static int NO_SIDES = 4;
 const static int SIZE_WELCOME = 100;
 const static char *WELCOME_COMMAND = "meep";
+const static char *FAIL_COMMAND = "Failed";
+const static int MAXIMUM_NODES = 64;
+const static SDL_Color SIDEONE = {255,0,0,0};
+const static SDL_Color SIDETWO = {0,255,0,0};
+const static SDL_Color SIDETHREE = {0,0,255,0};
+const static SDL_Color SIDEFOUR = {255,0,255,0};
+const static SDL_Color DEFAULT = {90,45,255,0};
+
 typedef struct
 {
 	int SCREEN_WIDTH, SCREEN_HEIGHT, PORT_ADDRESS;
-	const char *TITLE, *RED_FILEPATH, *BLUE_FILEPATH, *NODE_FILEPATH, *IP_ADDRESS_SERVER;
+	const char *TITLE, *RED_FILEPATH, *BLUE_FILEPATH, *NODE_FILEPATH, *IP_ADDRESS_SERVER, *FONT_PATH;
 }options;
 
 typedef struct
@@ -47,4 +55,10 @@ WSADATA startWinsock(int *success);
 SOCKET initSocket(int *success);
 struct sockaddr_in getServerDetails(options *opt, int *success);
 void deinit();
-int connectToServer(int *isSuccess, struct sockaddr_in details, SOCKET soc);
+char *connectToServer(int *isSuccess, struct sockaddr_in details, SOCKET soc);
+unitData **initUnits(int *success);
+void deinitUnits(unitData **unitArray);
+TTF_Font *LoadFont(const char *filename, int size, int *success);
+SDL_Texture *renderScore(TTF_Font *font, SDL_Rect *size, SDL_Renderer *render,const char *textStr, SDL_Color desireCol);
+node **initNodes(int *success);
+void deinitNodes(node **unitArray);
